@@ -392,6 +392,7 @@ class PCA(_BasePCA):
         n_oversamples=10,
         power_iteration_normalizer="auto",
         random_state=None,
+        demeaned = True,
     ):
         self.n_components = n_components
         self.copy = copy
@@ -402,6 +403,7 @@ class PCA(_BasePCA):
         self.n_oversamples = n_oversamples
         self.power_iteration_normalizer = power_iteration_normalizer
         self.random_state = random_state
+        self.demeaned = demeaned
 
     # TODO(1.4): remove in 1.4
     # mypy error: Decorated property not supported
@@ -530,8 +532,9 @@ class PCA(_BasePCA):
             )
 
         # Center data
-        self.mean_ = np.mean(X, axis=0)
-        X -= self.mean_
+        if(self.demeaned = True):
+            self.mean_ = np.mean(X, axis=0)
+            X -= self.mean_
 
         U, S, Vt = linalg.svd(X, full_matrices=False)
         # flip eigenvectors' sign to enforce deterministic output
